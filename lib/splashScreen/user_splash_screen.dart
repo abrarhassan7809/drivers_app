@@ -1,17 +1,18 @@
 import 'dart:async';
-import 'package:drivers_app/authentication/login_screen.dart';
 import 'package:drivers_app/global/global.dart';
 import 'package:drivers_app/mainScreens/main_screen.dart';
 import 'package:flutter/material.dart';
 
-class MySplashScreen extends StatefulWidget {
-  const MySplashScreen({super.key});
+import '../user_app/user_login.dart';
+
+class UserSplashScreen extends StatefulWidget {
+  const UserSplashScreen({super.key});
 
   @override
-  State<MySplashScreen> createState() => _MySplashScreenState();
+  State<UserSplashScreen> createState() => _UserSplashScreenState();
 }
 
-class _MySplashScreenState extends State<MySplashScreen> {
+class _UserSplashScreenState extends State<UserSplashScreen> {
 
   // show splash screen timer
   startTimer() {
@@ -25,7 +26,7 @@ class _MySplashScreenState extends State<MySplashScreen> {
       else {
         Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (_) => LoginScreen()));
+            MaterialPageRoute(builder: (_) => UserLogin()));
       }
     });
   }
@@ -40,12 +41,12 @@ class _MySplashScreenState extends State<MySplashScreen> {
   Widget build(BuildContext context) {
     return Material(
       child: Container(
-        color: Colors.black,
+        color: Colors.white,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset("asset/images/logo1.png"),
+              Image.asset("asset/images/logo.png"),
 
               SizedBox(height: 10,),
 

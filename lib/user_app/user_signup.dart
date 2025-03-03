@@ -1,35 +1,45 @@
-import 'package:drivers_app/authentication/signup_screen.dart';
-import 'package:drivers_app/splashScreen/driver_splash_screen.dart';
+import 'package:drivers_app/mainScreens/main_screen.dart';
+import 'package:drivers_app/splashScreen/user_splash_screen.dart';
+import 'package:drivers_app/user_app/user_login.dart';
+import 'package:drivers_app/widgets/progress_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../global/global.dart';
-import '../widgets/progress_dialog.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class UserSignup extends StatefulWidget {
+  const UserSignup({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<UserSignup> createState() => _UserSignupState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _UserSignupState extends State<UserSignup> {
+  TextEditingController nameTextEditingController = TextEditingController();
   TextEditingController emailTextEditingController = TextEditingController();
+  TextEditingController phoneTextEditingController = TextEditingController();
   TextEditingController passwordTextEditingController = TextEditingController();
 
   validateForm() {
-    if(!emailTextEditingController.text.contains("@")) {
+    if(nameTextEditingController.text.length < 3) {
+      Fluttertoast.showToast(msg: "Name must be at least 3 Characters.");
+    }
+    else if(!emailTextEditingController.text.contains("@")) {
       Fluttertoast.showToast(msg: "Email is not valid!");
     }
+    else if(phoneTextEditingController.text.isEmpty) {
+      Fluttertoast.showToast(msg: "Phone number is required");
+    }
     else if(passwordTextEditingController.text.length < 4) {
-      Fluttertoast.showToast(msg: "Password is required.");
+      Fluttertoast.showToast(msg: "Password must be at least 4 Characters.");
     }
     else {
-      loginDriverNow();
+      saveDriverInfoNow();
     }
   }
 
-  loginDriverNow() async {
+  saveDriverInfoNow() async {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -39,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     final User? firebaseUser = (
-        await fAuth.signInWithEmailAndPassword(
+        await fAuth.createUserWithEmailAndPassword(
             email: emailTextEditingController.text.trim(),
             password: passwordTextEditingController.text.trim()
         ).catchError((msg) {
@@ -50,35 +60,72 @@ class _LoginScreenState extends State<LoginScreen> {
     ).user;
 
     if(firebaseUser != null) {
+      Map driverMap = {
+        "id": firebaseUser.uid,
+        "name": nameTextEditingController.text.trim(),
+        "email": emailTextEditingController.text.trim(),
+        "phone": phoneTextEditingController.text.trim(),
+        "password": passwordTextEditingController.text.trim(),
+      };
+
+      DatabaseReference driversRef = FirebaseDatabase.instance.ref().child("users");
+      driversRef.child(firebaseUser.uid).set(driverMap);
+
       currentFirebaseUser = firebaseUser;
-      Fluttertoast.showToast(msg: "Login Successfully");
-      Navigator.push(context, MaterialPageRoute(builder: (_) => DriverSplashScreen()));
+      Fluttertoast.showToast(msg: "Account has been Created");
+      Navigator.push(context, MaterialPageRoute(builder: (_) => UserSplashScreen()));
     }
     else {
       Navigator.pop(context);
-      Fluttertoast.showToast(msg: "Not Login Successfully");
+      Fluttertoast.showToast(msg: "Account has not Created");
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
-              SizedBox(height: 50,),
+              SizedBox(height: 20,),
               Padding(
                 padding: EdgeInsets.all(20.0),
-                child: Image.asset("asset/images/logo1.png"),
+                child: Image.asset("asset/images/logo.png"),
               ),
 
               SizedBox(height: 10,),
               Text(
-                "Login as a Driver",
+                "Register as a User",
                 style: TextStyle(color: Colors.grey, fontSize: 26, fontWeight: FontWeight.bold),
+              ),
+
+              SizedBox(height: 10,),
+              TextField(
+                controller: nameTextEditingController,
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
+                decoration: InputDecoration(
+                  labelText: "Name",
+                  enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey,
+                      )
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey,
+                      )
+                  ),
+                  labelStyle: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 14,
+                  ),
+
+                ),
               ),
 
               SizedBox(height: 10,),
@@ -90,6 +137,33 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 decoration: InputDecoration(
                   labelText: "Email",
+                  enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey,
+                      )
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey,
+                      )
+                  ),
+                  labelStyle: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 14,
+                  ),
+
+                ),
+              ),
+
+              SizedBox(height: 10,),
+              TextField(
+                controller: phoneTextEditingController,
+                keyboardType: TextInputType.phone,
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
+                decoration: InputDecoration(
+                  labelText: "Phone",
                   enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.grey,
@@ -145,7 +219,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   backgroundColor: Colors.lightGreenAccent,
                 ),
                 child: Text(
-                  "Sign In",
+                  "Create Account",
                   style: TextStyle(
                       color: Colors.black54,
                       fontSize: 18
@@ -156,10 +230,10 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: 10,),
               TextButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => SignupScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => UserLogin()));
                 },
                 child: Text(
-                  "Don't have an Account? Register Here",
+                  "Already have an Account? Login Here",
                   style: TextStyle(color: Colors.grey, fontSize: 14),
                 ),
               ),

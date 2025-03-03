@@ -1,19 +1,19 @@
-import 'package:drivers_app/authentication/signup_screen.dart';
-import 'package:drivers_app/splashScreen/driver_splash_screen.dart';
+import 'package:drivers_app/splashScreen/user_splash_screen.dart';
+import 'package:drivers_app/user_app/user_signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../global/global.dart';
 import '../widgets/progress_dialog.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class UserLogin extends StatefulWidget {
+  const UserLogin({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<UserLogin> createState() => _UserLoginState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _UserLoginState extends State<UserLogin> {
   TextEditingController emailTextEditingController = TextEditingController();
   TextEditingController passwordTextEditingController = TextEditingController();
 
@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if(firebaseUser != null) {
       currentFirebaseUser = firebaseUser;
       Fluttertoast.showToast(msg: "Login Successfully");
-      Navigator.push(context, MaterialPageRoute(builder: (_) => DriverSplashScreen()));
+      Navigator.push(context, MaterialPageRoute(builder: (_) => UserSplashScreen()));
     }
     else {
       Navigator.pop(context);
@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -72,12 +72,12 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: 50,),
               Padding(
                 padding: EdgeInsets.all(20.0),
-                child: Image.asset("asset/images/logo1.png"),
+                child: Image.asset("asset/images/logo.png"),
               ),
 
               SizedBox(height: 10,),
               Text(
-                "Login as a Driver",
+                "Login as a User",
                 style: TextStyle(color: Colors.grey, fontSize: 26, fontWeight: FontWeight.bold),
               ),
 
@@ -156,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: 10,),
               TextButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => SignupScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => UserSignup()));
                 },
                 child: Text(
                   "Don't have an Account? Register Here",

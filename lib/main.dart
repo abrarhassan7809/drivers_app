@@ -1,4 +1,5 @@
-import 'package:drivers_app/splashScreen/splash_screen.dart';
+import 'package:drivers_app/mainScreens/user_type_screen.dart';
+import 'package:drivers_app/splashScreen/driver_splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,7 @@ void main() async {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: MySplashScreen(),
+        home: UserTypeScreen(),
       ),
     )
   );
