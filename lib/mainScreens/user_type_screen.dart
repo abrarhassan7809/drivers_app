@@ -26,7 +26,7 @@ class _UserTypeState extends State<UserTypeScreen> {
             SizedBox(height: 30,),
             GestureDetector(
               onTap: () {
-                Navigator.pushReplacement(
+                Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => DriverSplashScreen())
                 );
@@ -50,7 +50,7 @@ class _UserTypeState extends State<UserTypeScreen> {
             SizedBox(height: 20,),
             GestureDetector(
               onTap: () {
-                Navigator.pushReplacement(
+                Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => UserSplashScreen())
                 );

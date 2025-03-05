@@ -35,11 +35,11 @@ class _UserSignupState extends State<UserSignup> {
       Fluttertoast.showToast(msg: "Password must be at least 4 Characters.");
     }
     else {
-      saveDriverInfoNow();
+      saveUserInfoNow();
     }
   }
 
-  saveDriverInfoNow() async {
+  saveUserInfoNow() async {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -60,7 +60,7 @@ class _UserSignupState extends State<UserSignup> {
     ).user;
 
     if(firebaseUser != null) {
-      Map driverMap = {
+      Map userMap = {
         "id": firebaseUser.uid,
         "name": nameTextEditingController.text.trim(),
         "email": emailTextEditingController.text.trim(),
@@ -69,11 +69,11 @@ class _UserSignupState extends State<UserSignup> {
       };
 
       DatabaseReference driversRef = FirebaseDatabase.instance.ref().child("users");
-      driversRef.child(firebaseUser.uid).set(driverMap);
+      driversRef.child(firebaseUser.uid).set(userMap);
 
       currentFirebaseUser = firebaseUser;
       Fluttertoast.showToast(msg: "Account has been Created");
-      Navigator.push(context, MaterialPageRoute(builder: (_) => UserSplashScreen()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => UserSplashScreen()));
     }
     else {
       Navigator.pop(context);
@@ -233,7 +233,7 @@ class _UserSignupState extends State<UserSignup> {
                   Navigator.push(context, MaterialPageRoute(builder: (_) => UserLogin()));
                 },
                 child: Text(
-                  "Already have an Account? Login Here",
+                  "Already have an Account? Login here",
                   style: TextStyle(color: Colors.grey, fontSize: 14),
                 ),
               ),

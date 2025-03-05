@@ -25,11 +25,11 @@ class _UserLoginState extends State<UserLogin> {
       Fluttertoast.showToast(msg: "Password is required.");
     }
     else {
-      loginDriverNow();
+      loginUserNow();
     }
   }
 
-  loginDriverNow() async {
+  loginUserNow() async {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -52,7 +52,7 @@ class _UserLoginState extends State<UserLogin> {
     if(firebaseUser != null) {
       currentFirebaseUser = firebaseUser;
       Fluttertoast.showToast(msg: "Login Successfully");
-      Navigator.push(context, MaterialPageRoute(builder: (_) => UserSplashScreen()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => UserSplashScreen()));
     }
     else {
       Navigator.pop(context);
@@ -159,7 +159,7 @@ class _UserLoginState extends State<UserLogin> {
                   Navigator.push(context, MaterialPageRoute(builder: (_) => UserSignup()));
                 },
                 child: Text(
-                  "Don't have an Account? Register Here",
+                  "Don't have an Account? Register here",
                   style: TextStyle(color: Colors.grey, fontSize: 14),
                 ),
               ),

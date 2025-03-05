@@ -51,7 +51,7 @@ class _UserSplashScreenState extends State<UserSplashScreen> {
               SizedBox(height: 10,),
 
               Text("Welcome to Driver App",
-                style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.grey, fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ],
           ),
